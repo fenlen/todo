@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Note from './components/Note'
 import noteService from './services/notes'
 import './App.css';
+import { Table, Form, Button } from 'react-bootstrap'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -32,11 +33,15 @@ const App = () => {
   }
 
   const rows = () => notesToShow.map(note => 
-    <Note 
-      key={note.id}
-      note={note}
-      toggleImportance={() => toggleImportanceOf(note.id)}
-    />
+    <tr key={note.id}>
+      <td>{note.content}</td>
+      <td>
+        {note.important
+        ? <Button onClick={() => toggleImportanceOf(note.id)}>Not important</Button>
+        : <Button onClick={() => toggleImportanceOf(note.id)}>Important</Button>
+        }
+      </td>
+    </tr>
   )
 
   const handleNoteChange = (event) => {
@@ -60,22 +65,26 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div class="container">
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
+        <Button variant="primary" onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
-        </button>
+        </Button>
       </div>
-      <ul>
-        {rows()}
-      </ul>
-      <form onSubmit={addNote}>
-        <input
-        value={newNote}
-        onChange={handleNoteChange}
-        />
-        <button type="submit">save</button>
-      </form>
+      <Table striped>
+        <tbody>
+          {rows()}
+        </tbody>
+      </Table>
+      <Form onSubmit={addNote}>
+        <Form.Group>
+          <Form.Control
+          value={newNote}
+          onChange={handleNoteChange}
+          />
+          <Button variant="primary" type="submit">save</Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }
