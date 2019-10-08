@@ -24,6 +24,7 @@ notesRouter.post('/', async (request, response, next) => {
 
     const note = new Note({
         content: body.content,
+        category: body.category === undefined ? 'default' : body.category,
         important: body.important === undefined ? false : body.important,
         date: new Date()
     })
@@ -49,6 +50,7 @@ notesRouter.put('/:id', (request, response, next) => {
 
     const note = {
         content: body.content,
+        category: body.category,
         important: body.important
     }
     

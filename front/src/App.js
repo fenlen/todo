@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Note from './components/Note'
 import noteService from './services/notes'
 import './App.css';
 import { Table, Form, Button } from 'react-bootstrap'
@@ -7,6 +6,7 @@ import { Table, Form, Button } from 'react-bootstrap'
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
+  const [newCategory, setNewCat] = useState('')
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
@@ -35,6 +35,7 @@ const App = () => {
   const rows = () => notesToShow.map(note => 
     <tr key={note.id}>
       <td>{note.content}</td>
+      <td>{note.category}</td>
       <td>
         {note.important
         ? <Button onClick={() => toggleImportanceOf(note.id)}>Not important</Button>
@@ -52,6 +53,7 @@ const App = () => {
     event.preventDefault()
     const noteObject = {
       content: newNote,
+      category: newCategory,
       date: new Date(),
       important: false
     }
@@ -65,7 +67,7 @@ const App = () => {
   }
 
   return (
-    <div class="container">
+    <div className="container">
       <div>
         <Button variant="primary" onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -78,10 +80,21 @@ const App = () => {
       </Table>
       <Form onSubmit={addNote}>
         <Form.Group>
+          <Form.Label>Content</Form.Label>
           <Form.Control
           value={newNote}
           onChange={handleNoteChange}
           />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Category</Form.Label>
+          <Form.Control 
+          value={newCategory} 
+          as="select"
+          onChange={({ target }) => setNewCat(target.value)}>
+          <option>Default</option>
+          <option>tst</option>
+          </Form.Control>
           <Button variant="primary" type="submit">save</Button>
         </Form.Group>
       </Form>
