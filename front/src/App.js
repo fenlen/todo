@@ -8,6 +8,7 @@ const App = () => {
   const [newNote, setNewNote] = useState('')
   const [newCategory, setNewCat] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     noteService
@@ -21,6 +22,7 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important === true)
 
+
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
@@ -30,6 +32,14 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note: returnedNote))
       })
+  }
+
+  const deleteNote = id => {
+    noteService
+    .del(id)
+    .then(() => {
+      setNotes(notes.filter(note => note.id !== id))
+    })
   }
 
   const rows = () => notesToShow.map(note => 
@@ -42,6 +52,7 @@ const App = () => {
         : <Button onClick={() => toggleImportanceOf(note.id)}>Important</Button>
         }
       </td>
+      <td><Button variant="danger" onClick={() => deleteNote(note.id)}>Delete</Button></td>
     </tr>
   )
 
@@ -53,7 +64,7 @@ const App = () => {
     event.preventDefault()
     const noteObject = {
       content: newNote,
-      category: newCategory,
+      // category: newCategory,
       date: new Date(),
       important: false
     }
@@ -88,13 +99,13 @@ const App = () => {
         </Form.Group>
         <Form.Group>
           <Form.Label>Category</Form.Label>
-          <Form.Control 
+          {/* <Form.Control 
           value={newCategory} 
           as="select"
           onChange={({ target }) => setNewCat(target.value)}>
           <option>Default</option>
           <option>tst</option>
-          </Form.Control>
+          </Form.Control> */}
           <Button variant="primary" type="submit">save</Button>
         </Form.Group>
       </Form>

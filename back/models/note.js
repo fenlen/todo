@@ -7,9 +7,8 @@ const noteSchema = new mongoose.Schema({
         minlength: 5
     },
     category: {
-        type: String,
-        required: true,
-        minlength: 3
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category'
     },
     date: Date,
     important: Boolean
